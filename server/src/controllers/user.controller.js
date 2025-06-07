@@ -1,179 +1,149 @@
-import { User } from "../models/user.model.js";
-import { ApiError } from "../utils/ApiError.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import jwt from "jsonwebtoken";
-import { emailCheck, passwordCheck } from "../utils/inputValidation.js";
+import {User} from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import { generateToken } from "../utils/generateToken.js";
+import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
-
-const generateToken = async(user) => {
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
-
-    user.refreshToken = refreshToken;
-
-    await user.save({ validateBeforeSave: false});
-
-    return { accessToken, refreshToken };
-}
-
-const cookieOptions = {
-    httpOnly: true,
-    secure: false,
-    maxAge: 7*24*60*60*1000
-}
-
-const registerController = asyncHandler(async (req, res) => {
-    const { name, email, password, role} = req.body;
-
-    emailCheck(email);
-    passwordCheck(password);
-
-    const emailExist = await User.findOne({ email });
-    if(emailExist) {
-        throw new ApiError(400,"Email already exists");
-    }
-
-    // cloudinary
-
-    const user = await User.create({
-        name,
-        email,
-        password,
-        role
-    })
-
-    const createdUser = await User.findById(user._id).select("-password -refreshToken");
-
-    if(!createdUser) {
-        throw new ApiError(500, "User creation failed");
-    }
-
-    const { accessToken, refreshToken} = await generateToken(createdUser);
-
-    return res
-        .status(201)
-        .cookie('refreshToken', refreshToken, cookieOptions)
-        .cookie('accessToken', accessToken, cookieOptions)
-        .json(
-            new ApiResponse(
-                201,
-                createdUser,
-                "User registered successfully"
-            )
-        )
-
-})
-
-const loginController = asyncHandler(async (req,res) => {
-    const {email, password} = req.body;
-
-    if(!email || !password) {
-        throw new ApiError(400, "Email or Password is missing");
-    }
-
-    emailCheck(email);
-    passwordCheck(password);
-
-    const user = await User.findOne({ email});
-
-    if(!user) {
-        throw new ApiError(404, "User not found");
-    }
-
-    const isPasswordValid = await user.isPasswordCorrect(password);
-
-    if(!isPasswordValid) {
-        throw new ApiError(401, "Invalid email or password");
-    }
-
-    const { accessToken, refreshToken } = await generateToken(user);
-
-
-    const loggedUser = await User.findById(user._id).select("-password -refreshToken");
-
-    if(!loggedUser){
-        throw new ApiError(500, "Something went wrong while logging in")
-    }
-
-    return res
-        .status(200)
-        .cookie('refreshToken', refreshToken, cookieOptions)
-        .cookie('accessToken', accessToken, cookieOptions)
-        .json(
-            new ApiResponse(
-                201,
-                loggedUser,
-                "User Logged in successfully"
-            )
-        )
-})
-
-const refreshAccessTokenController = asyncHandler(async (req,res) => {
-    const  token = req.cookies.refreshToken || req.body.refreshToken
-   // console.log(token)
-    if(!token) {
-        throw new ApiError(401, "unauthorized request") 
-    }
-
+export const register = async (req,res) => {
     try {
-        const decodeToken = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
-        //console.log(decodeToken);
-        const user = await User.findById(decodeToken?._id)
-        //console.log(user);
-        
-        if(!user) {
-            throw new ApiError(401, "Invalid refresh token")
+       
+        const {name, email, password} = req.body; // patel214
+        if(!name || !email || !password){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required."
+            })
         }
-
-        if(token != user?.refreshToken) {
-            throw new ApiError(401, "Refresh Token is expires or used")
+        const user = await User.findOne({email});
+        if(user){
+            return res.status(400).json({
+                success:false,
+                message:"User already exist with this email."
+            })
         }
-
-
-        const {accessToken, newRefreshToken} = await generateToken(user)
-
-        return res
-        .status(200)
-        .cookie("accessToken", accessToken, option)
-        .cookie("refreshToken", newRefreshToken, option)
-        .json(
-            new ApiResponse(
-                200,
-                {accessToken, refreshToken: newRefreshToken},
-                "Access Token Refreshed"
-            )
-        )
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.create({
+            name,
+            email,
+            password:hashedPassword
+        });
+        return res.status(201).json({
+            success:true,
+            message:"Account created successfully."
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to register"
+        })
+    }
+}
+export const login = async (req,res) => {
+    try {
+        const {email, password} = req.body;
+        if(!email || !password){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required."
+            })
+        }
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(400).json({
+                success:false,
+                message:"Incorrect email or password"
+            })
+        }
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if(!isPasswordMatch){
+            return res.status(400).json({
+                success:false,
+                message:"Incorrect email or password"
+            });
+        }
+        generateToken(res, user, `Welcome back ${user.name}`);
 
     } catch (error) {
-        throw new ApiError(401, error?.message || "Invalid  refresh token")
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to login"
+        })
     }
-})
-
-const logoutController = asyncHandler(async (req,res)=> {
-    await User.findById(
-        req.user._id,
-        {
-            $unset:{
-                refreshToken:1
-            }
-        },
-        {
-            new : true
+}
+export const logout = async (_,res) => {
+    try {
+        return res.status(200).cookie("token", "", {maxAge:0}).json({
+            message:"Logged out successfully.",
+            success:true
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to logout"
+        }) 
+    }
+}
+export const getUserProfile = async (req,res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId).select("-password").populate("enrolledCourses");
+        if(!user){
+            return res.status(404).json({
+                message:"Profile not found",
+                success:false
+            })
         }
-    )
+        return res.status(200).json({
+            success:true,
+            user
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to load user"
+        })
+    }
+}
+export const updateProfile = async (req,res) => {
+    try {
+        const userId = req.id;
+        const {name} = req.body;
+        const profilePhoto = req.file;
 
-return res
-    .status(200)
-    .clearCookie("accessToken", cookieOptions)
-    .clearCookie("refreshToken", cookieOptions)
-    .json(new ApiResponse(200, {}, "User Logged out successfully"))
-})
+        const user = await User.findById(userId);
+        if(!user){
+            return res.status(404).json({
+                message:"User not found",
+                success:false
+            }) 
+        }
+        // extract public id of the old image from the url is it exists;
+        if(user.photoUrl){
+            const publicId = user.photoUrl.split("/").pop().split(".")[0]; // extract public id
+            deleteMediaFromCloudinary(publicId);
+        }
 
-export {
-    registerController,
-    loginController,
-    refreshAccessTokenController,
-    logoutController
+        // upload new photo
+        const cloudResponse = await uploadMedia(profilePhoto.path);
+        const photoUrl = cloudResponse.secure_url;
 
+        const updatedData = {name, photoUrl};
+        const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {new:true}).select("-password");
+
+        return res.status(200).json({
+            success:true,
+            user:updatedUser,
+            message:"Profile updated successfully."
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Failed to update profile"
+        })
+    }
 }

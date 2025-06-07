@@ -1,21 +1,14 @@
-import { Router } from "express";
-import { 
-    loginController,
-    logoutController,
-    refreshAccessTokenController,
-    registerController,
+import express from "express";
+import { getUserProfile, login, logout, register, updateProfile } from "../controllers/user.controller.js";
+import isAuthenticated from "../middlewares/authMiddlerware.js";
+import upload from "../utils/multer.js";
 
-       } from "../controllers/user.controller.js";
-import { authMiddleware } from "../middlewares/authMiddlerware.js";
+const router = express.Router();
 
-const router = Router();
-
-router.route("/register").post(registerController);
-router.route("/login").post(loginController);
-router.route("/refresh-token").post(refreshAccessTokenController);
-
-router.use(authMiddleware);
-
-router.route("logout").get(logoutController);
+router.route("/register").post(register);
+router.route("/login").post(login);
+router.route("/logout").get(logout);
+router.route("/profile").get(isAuthenticated, getUserProfile);
+router.route("/profile/update").put(isAuthenticated, upload.single("profilePhoto"), updateProfile);
 
 export default router;
