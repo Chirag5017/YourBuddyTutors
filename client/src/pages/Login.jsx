@@ -100,46 +100,48 @@ export default function Login() {
     }
 
   return (
-    <div className="flex items-center w-full justify-center mt-20">
-    <div className="flex w-full max-w-sm flex-col gap-6">
+    <div className="flex items-center w-full justify-center min-h-screen bg-slate-50 p-4">
+    <div className="flex w-full max-w-md flex-col gap-6">
       <Tabs defaultValue="login">
-        <TabsList>
-          <TabsTrigger value="login">Login</TabsTrigger>
-          <TabsTrigger value="signup">SignUp</TabsTrigger>
+        <TabsList className="bg-white/70 backdrop-blur-sm border shadow-lg w-50">
+          <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-400  data-[state=active]:to-blue-500 data-[state=active]:text-white cursor-pointer">Login</TabsTrigger>
+          <TabsTrigger value="signup" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-400  data-[state=active]:to-blue-500 data-[state=active]:text-white cursor-pointer">SignUp</TabsTrigger>
         </TabsList>
         <TabsContent value="login">
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-lg border border-white/20 shadow-xl">
             <CardHeader>
-              <CardTitle>Login</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-gray-800">Login</CardTitle>
+              <CardDescription className="text-gray-600">
                 Login your password here. After signup you will be logged
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-current">Email</Label>
+                <Label htmlFor="tabs-demo-current" className="text-gray-700">Email</Label>
                 <Input 
                 type="email" 
                 placeholder="john@example.com"
                  onChange={(e) => changeHandler(e,"login")}
                  name="email"
                 value={login.email}
+                className="bg-white/70 border-gray-200 focus:border-purple-400 focus:ring-purple-400"
                  />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-new">Password</Label>
+                <Label htmlFor="tabs-demo-new" className="text-gray-700">Password</Label>
                 <Input 
                 type="password" 
                 placeholder="John@doe"
                 onChange={(e) => changeHandler(e,"login")}
                 name="password"
                 value={login.password}
+                className="bg-white/70 border-gray-200 focus:border-purple-400 focus:ring-purple-400"
                  />
               </div>
             </CardContent>
             <CardFooter>
               <Button
-              className="bg-blue-500 cursor-pointer hover:bg-blue-600 w-84"
+              className="bg-gradient-to-r from-purple-400 to-blue-500 text-white cursor-pointer w-full shadow-lg hover:bg-blue-600 transition-all duration-200"
               onClick={() => clickHandler("login")}
                disabled={loginIsLoading}
               >
@@ -156,48 +158,51 @@ export default function Login() {
           </Card>
         </TabsContent>
          <TabsContent value="signup">
-          <Card>
+          <Card className="bg-white/80 backdrop-blur-lg border border-white/20 shadow-xl">
             <CardHeader>
-              <CardTitle>SignUp</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-gray-800">SignUp</CardTitle>
+              <CardDescription className="text-gray-600">
                 Create a new account and click signup when you are done.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-name">Name</Label>
+                <Label htmlFor="tabs-demo-name" className="text-gray-700">Name</Label>
                 <Input 
                 type="text" 
                 placeholder="John Doe"
                 onChange={(e) => changeHandler(e,"signup")}
                 name="name"
                 value={signup.name}
+                className="bg-white/70 border-gray-200 focus:border-purple-400 focus:ring-purple-400"
                 />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-username">Email</Label>
+                <Label htmlFor="tabs-demo-username" className="text-gray-700">Email</Label>
                 <Input 
                 type="email" 
                 placeholder="john@example.com"
                 onChange={(e) => changeHandler(e,"signup")}
                  name="email"
                 value={signup.email}
+                className="bg-white/70 border-gray-200 focus:border-purple-400 focus:ring-purple-400"
                  />
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-username">Password</Label>
+                <Label htmlFor="tabs-demo-username" className="text-gray-700">Password</Label>
                 <Input 
                 type="password" 
                 placeholder="John@doe"
                 onChange={(e) => changeHandler(e,"signup")}
                 name="password"
                 value={signup.password}
+                className="bg-white/70 border-gray-200 focus:border-purple-400 focus:ring-purple-400"
                  />
               </div>
             </CardContent>
             <CardFooter>
               <Button 
-              className="bg-blue-500 cursor-pointer hover:bg-blue-600 w-84" 
+              className="bg-gradient-to-r from-purple-500 to-blue-500  hover:bg-blue-600 text-white cursor-pointer w-full shadow-lg hover:shadow-xl transition-all duration-200" 
               onClick={() => clickHandler("signup")}
               disabled={registerIsLoading}
               >

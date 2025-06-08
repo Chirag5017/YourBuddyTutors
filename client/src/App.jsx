@@ -4,6 +4,8 @@ import Navbar from './components/NavBar'
 import Login from './pages/Login'
 import HeroSection from './pages/student/HeroSection'
 import Courses from './pages/student/Courses'
+import FeatureSection from './pages/student/FeatureSection'
+import ContactSection from './pages/student/ContactSection'
 
 function App() {
 
@@ -14,7 +16,9 @@ function App() {
       <Route path='/' element={
         <>
         <HeroSection/>
+        <FeatureSection/>
         <Courses/>
+        <ContactSection/>
         </>
         }/>
       <Route path='/login' element={<Login/>}/>
