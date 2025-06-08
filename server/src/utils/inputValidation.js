@@ -20,10 +20,10 @@ const passwordSchema = z.string()
     try {
       const validateResult = emailSchema.safeParse(email);
       if(!validateResult.success){
-        throw new ApiError(400,validateResult.error.issues[0].message)
+        return validateResult.error.issues[0].message;
       }
     } catch (error) {
-        throw new ApiError(400, error?.message || "Invalid email")
+       return error?.message || "Invalid email";
     }
   }
 
@@ -33,14 +33,10 @@ const passwordSchema = z.string()
           
           if(!validateResult.success){
               const errorMessages = validateResult.error.issues.map(issue => issue.message);
-              // console.log("here at");
-              console.log(errorMessages[0]);
-              // console.log("here at");
-              
-              throw new ApiError(400, errorMessages[0]);
+               return errorMessages[0];
           }
         } catch (error) {
-            throw new ApiError(400, error?.message || "Invalid password")
+          return error?.message || "Invalid email"
         }
     }
 

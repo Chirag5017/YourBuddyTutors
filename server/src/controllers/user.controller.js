@@ -1,18 +1,32 @@
 import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { generateToken } from "../utils/generateToken.js";
+import { generateToken, setCookie } from "../utils/generateToken.js";
 import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
+import { emailCheck, passwordCheck } from "../utils/inputValidation.js";
 
 export const register = async (req,res) => {
     try {
        
-        const {name, email, password} = req.body; // patel214
+        const {name, email, password} = req.body;
+
         if(!name || !email || !password){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required."
             })
         }
+
+        const emailAns = emailCheck(email);
+        const passwordAns = passwordCheck(password);
+
+        if(emailAns || passwordAns) {
+            return res.status(400)
+            .json({
+                success:false,
+                message: emailAns || passwordAns
+            })
+        }
+
         const user = await User.findOne({email});
         if(user){
             return res.status(400).json({
@@ -47,20 +61,35 @@ export const login = async (req,res) => {
                 message:"All fields are required."
             })
         }
-        const user = await User.findOne({email});
-        if(!user){
+
+        const emailAns = emailCheck(email);
+        const passwordAns = passwordCheck(password);
+
+        if(emailAns || passwordAns) {
+            return res.status(400)
+            .json({
+                success:false,
+                message: emailAns || passwordAns
+            })
+        }
+
+        const existingUser = await User.findOne({email});
+        if(!existingUser){
             return res.status(400).json({
                 success:false,
                 message:"Incorrect email or password"
             })
         }
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
         if(!isPasswordMatch){
             return res.status(400).json({
                 success:false,
                 message:"Incorrect email or password"
             });
         }
+
+        const user = await User.findById(existingUser._id).select("-password");
+
         generateToken(res, user, `Welcome back ${user.name}`);
 
     } catch (error) {
@@ -71,9 +100,11 @@ export const login = async (req,res) => {
         })
     }
 }
-export const logout = async (_,res) => {
+export const logout = async (req,res) => {
     try {
-        return res.status(200).cookie("token", "", {maxAge:0}).json({
+        return res.status(200)
+          .clearCookie("token", setCookie)
+          .json({
             message:"Logged out successfully.",
             success:true
         })
