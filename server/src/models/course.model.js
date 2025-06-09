@@ -14,6 +14,11 @@ const courseSchema = new mongoose.Schema({
         type:String
     },
 
+    students:{
+        type:String,
+        default:"2500+"
+    },
+
     category:{
         type:String,
         required:true

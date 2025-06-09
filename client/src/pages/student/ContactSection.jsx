@@ -20,7 +20,7 @@ const ContactSection = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center">
             <motion.button
-              className="w-full sm:w-auto bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center justify-center space-x-2 hover:from-purple-600 hover:to-pink-600 transition-all duration-200"
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-400 to-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center justify-center space-x-2 hover:from-purple-400 hover:to-blue-500 transition-all duration-200"
               whileHover={{ 
                 scale: 1.05, 
                 boxShadow: "0 15px 35px rgba(168, 85, 247, 0.4)" 
