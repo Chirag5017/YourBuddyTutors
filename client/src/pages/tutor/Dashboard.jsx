@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { useGetPurchasedCoursesQuery } from "@/app/api/courseApi";
+import { useGetPurchasedCoursesQuery } from "@/app/api/purchaseApi.js";
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { courses as demo } from "../student/MyLearning";
@@ -15,15 +15,15 @@ import {
 } from "lucide-react";
 
 const Dashboard = () => {
-  // const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
+  const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
 
-  // if(isLoading) return <h1>Loading...</h1>
-  // if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
-  const purchasedCourse = [...demo];
+  if(isLoading) return <h1>Loading...</h1>
+  if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
+  const  { purchasedCourse } = data || [];
 
   const courseData = purchasedCourse.map((course) => ({
-    name: course.title,
-    price: course.price
+     name:course.courseId.courseTitle,
+    price:course.courseId.coursePrice
   }));
 
   const totalRevenue = purchasedCourse.reduce((acc, element) => acc + (element.amount || 0), 0);
@@ -35,9 +35,9 @@ const Dashboard = () => {
       value: totalSales,
       icon: ShoppingCart,
       color: "blue",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      valueColor: "text-blue-600",
+      bgColor: "bg-blue-50 dark:bg-blue-900/20",
+      iconColor: "text-blue-600 dark:text-blue-400",
+      valueColor: "text-blue-600 dark:text-blue-400",
       change: "+12.5%",
       changeType: "positive"
     },
@@ -46,9 +46,9 @@ const Dashboard = () => {
       value: `₹${totalRevenue.toLocaleString()}`,
       icon: DollarSign,
       color: "green",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-      valueColor: "text-green-600",
+      bgColor: "bg-green-50 dark:bg-green-900/20",
+      iconColor: "text-green-600 dark:text-green-400",
+      valueColor: "text-green-600 dark:text-green-400",
       change: "+8.2%",
       changeType: "positive"
     },
@@ -57,35 +57,35 @@ const Dashboard = () => {
       value: `₹${Math.round(averagePrice).toLocaleString()}`,
       icon: Target,
       color: "purple",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      valueColor: "text-purple-600",
+      bgColor: "bg-purple-50 dark:bg-purple-900/20",
+      iconColor: "text-purple-600 dark:text-purple-400",
+      valueColor: "text-purple-600 dark:text-purple-400",
       change: "+3.1%",
       changeType: "positive"
     },
   ];
 
   return (
-    <div className="mt-23 bg-slate-50 p-6">
+    <div className="mt-23 bg-slate-50 dark:bg-gray-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-              <p className="text-gray-600 flex items-center gap-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Dashboard</h1>
+              <p className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 Monitor your course performance and sales metrics
               </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-sm text-gray-600">Last Updated</p>
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Last Updated</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {new Date().toLocaleDateString()}
                 </p>
               </div>
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full">
+              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500 rounded-full">
                 <Award className="w-6 h-6 text-white" />
               </div>
             </div>
@@ -97,7 +97,7 @@ const Dashboard = () => {
           {stats.map((stat, index) => (
             <Card 
               key={index}
-              className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0 overflow-hidden"
+              className="shadow-lg hover:shadow-xl dark:shadow-black/20 dark:hover:shadow-black/40 transition-all duration-300 transform hover:scale-105 border-0 overflow-hidden bg-white dark:bg-gray-800"
             >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -106,14 +106,14 @@ const Dashboard = () => {
                   </div>
                   <div className={`px-2 py-1 rounded-full text-xs font-medium ${
                     stat.changeType === 'positive' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400' 
+                      : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400'
                   }`}>
                     {stat.change}
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
                     {stat.title}
                   </p>
                   <p className={`text-2xl font-bold ${stat.valueColor}`}>
@@ -128,13 +128,13 @@ const Dashboard = () => {
         {/* Chart Section */}
         <div className="grid gap-6 grid-cols-1 lg:grid-cols-3 mb-8">
           {/* Main Chart */}
-          <Card className="shadow-xl hover:shadow-2xl transition-shadow duration-300 border-0 lg:col-span-2">
-            <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-              <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-                <TrendingUp className="w-6 h-6 text-blue-600" />
+          <Card className="shadow-xl hover:shadow-2xl dark:shadow-black/20 dark:hover:shadow-black/40 transition-shadow duration-300 border-0 lg:col-span-2 bg-white dark:bg-gray-800">
+            <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-b border-gray-200 dark:border-gray-600 p-5">
+              <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-3">
+                <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400 " />
                 Course Price Analysis
               </CardTitle>
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                 Visual representation of your course pricing strategy
               </p>
             </CardHeader>
@@ -188,29 +188,29 @@ const Dashboard = () => {
           {/* Side Stats */}
           <div className="space-y-6">
             {/* Quick Stats */}
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-0">
+            <Card className="shadow-lg hover:shadow-xl dark:shadow-black/20 dark:hover:shadow-black/40 transition-shadow duration-300 border-0 bg-white dark:bg-gray-800">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-blue-600" />
+                <CardTitle className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   Quick Stats
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Highest Priced Course</span>
-                  <span className="font-semibold text-green-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Highest Priced Course</span>
+                  <span className="font-semibold text-green-600 dark:text-green-400">
                     ₹{Math.max(...courseData.map(c => c.price)).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Lowest Priced Course</span>
-                  <span className="font-semibold text-blue-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Lowest Priced Course</span>
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">
                     ₹{Math.min(...courseData.map(c => c.price)).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Courses</span>
-                  <span className="font-semibold text-purple-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Total Courses</span>
+                  <span className="font-semibold text-purple-600 dark:text-purple-400">
                     {courseData.length}
                   </span>
                 </div>
@@ -218,23 +218,23 @@ const Dashboard = () => {
             </Card>
 
             {/* Performance Indicator */}
-            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-gradient-to-br from-blue-50 to-indigo-100">
+            <Card className="shadow-lg hover:shadow-xl dark:shadow-black/20 dark:hover:shadow-black/40 transition-shadow duration-300 border-0 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                  <Award className="w-5 h-5 text-blue-600" />
+                <CardTitle className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                  <Award className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   Performance
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                     {totalSales > 10 ? '🚀' : totalSales > 5 ? '📈' : '🌱'}
                   </div>
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     {totalSales > 10 ? 'Excellent Performance!' : 
                      totalSales > 5 ? 'Good Progress!' : 'Getting Started!'}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                     Keep up the great work!
                   </p>
                 </div>
@@ -244,10 +244,10 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Activity */}
-        <Card className="shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-            <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
+        <Card className="shadow-xl border-0 bg-white dark:bg-gray-800">
+          <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-b border-gray-200 dark:border-gray-600 p-5">
+            <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-3">
+              <BarChart3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               Course Overview
             </CardTitle>
           </CardHeader>
@@ -256,17 +256,17 @@ const Dashboard = () => {
               {courseData.slice(0, 6).map((course, index) => (
                 <div 
                   key={index}
-                  className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 hover:shadow-md transition-shadow duration-200"
+                  className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-700/50 hover:shadow-md dark:hover:shadow-black/20 transition-shadow duration-200"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800 text-sm truncate">
+                      <h4 className="font-semibold text-gray-800 dark:text-gray-200 text-sm truncate">
                         {course.name}
                       </h4>
-                      <p className="text-xs text-gray-600 mt-1">Course #{index + 1}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Course #{index + 1}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-blue-600">₹{course.price}</p>
+                      <p className="font-bold text-blue-600 dark:text-blue-400">₹{course.price}</p>
                     </div>
                   </div>
                 </div>

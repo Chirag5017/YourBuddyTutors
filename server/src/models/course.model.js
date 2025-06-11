@@ -7,12 +7,8 @@ const courseSchema = new mongoose.Schema({
     },
 
     subTitle: {
-        type:String
+        type:String,
     }, 
-
-    description: { 
-        type:String
-    },
 
     students:{
         type:String,
@@ -30,7 +26,7 @@ const courseSchema = new mongoose.Schema({
     },
 
     coursePrice:{
-        type:Number
+        type:String
     },
 
     courseThumbnail:{

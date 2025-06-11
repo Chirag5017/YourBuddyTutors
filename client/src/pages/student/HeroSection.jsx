@@ -4,11 +4,12 @@ import {
   BookOpen,  
   ArrowRight, 
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const TypewriterText = ({ text, delay = 0 }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       if (currentIndex < text.length) {
@@ -24,6 +25,7 @@ const TypewriterText = ({ text, delay = 0 }) => {
 };
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6">
       {/* Animated Background */}
@@ -90,14 +92,15 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 1.2 }}
           >
             <motion.button
-              className="w-full sm:w-auto bg-gradient-to-r from-purple-400 to-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center justify-center space-x-2 hover:from-purple-400 hover:to-blue-500 transition-all duration-200"
+              onClick={()=> navigate(`/course/search?query`)}
+              className="w-full sm:w-auto cursor-pointer bg-gradient-to-r from-purple-400 to-blue-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center justify-center space-x-2 hover:from-purple-400 hover:to-blue-500 transition-all duration-200"
               whileHover={{ 
                 scale: 1.05, 
                 boxShadow: "0 15px 35px rgba(91, 82, 228, 0.53)" 
               }}
               whileTap={{ scale: 0.95 }}
             >
-              <span>Get Started Today</span>
+              <span>Explorer Courses</span>
               <ArrowRight size={18} />
             </motion.button>
           </motion.div>

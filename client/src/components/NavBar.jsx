@@ -100,7 +100,7 @@ const Navbar = () => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar>
+                    <Avatar className="cursor-pointer">
                       <AvatarImage
                         src={user?.photoUrl || "https://github.com/shadcn.png"}
                         alt="@shadcn"
@@ -112,21 +112,28 @@ const Navbar = () => {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>
-                        <Link to="my-learning">My learning</Link>
+                        <Link to="my-learning">
+                      <DropdownMenuItem className="cursor-pointer">
+                        My learning
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        {" "}
-                        <Link to="profile">Edit Profile</Link>{" "}
+                        </Link>
+                        <Link to="profile">
+                      <DropdownMenuItem className="cursor-pointer">
+                        Edit Profile
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={logoutHandler}>
+                        </Link>
+                      <DropdownMenuItem onClick={logoutHandler} className="cursor-pointer">
                         Log out
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
                     {user?.role === "tutor" && (
                       <>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><Link to="/tutor/dashboard">Dashboard</Link></DropdownMenuItem>
+                          <Link to="/tutor/dashboard">
+                        <DropdownMenuItem className="cursor-pointer">
+                        Dashboard
+                        </DropdownMenuItem>
+                        </Link>
                       </>
                     )}
                   </DropdownMenuContent>

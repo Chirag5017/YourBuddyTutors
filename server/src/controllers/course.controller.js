@@ -33,13 +33,14 @@ export const searchCourse = async (req,res) => {
     try {
         const {query = "", categories = [], sortByPrice =""} = req.query;
         console.log(categories);
+        const newquery = query.replace(/\s/g, '');
+        console.log(newquery);
+        
         
         // create search query
         const searchCriteria = {
             isPublished:true,
             $or:[
-                {courseTitle: {$regex:query, $options:"i"}},
-                {subTitle: {$regex:query, $options:"i"}},
                 {category: {$regex:query, $options:"i"}},
             ]
         }
@@ -111,8 +112,11 @@ export const getCreatorCourses = async (req,res) => {
 export const editCourse = async (req,res) => {
     try {
         const courseId = req.params.courseId;
-        const {courseTitle, subTitle, description, category, courseLevel, coursePrice} = req.body;
+        var {courseTitle, subTitle, category, courseLevel, coursePrice} = req.body;
         const thumbnail = req.file;
+        console.log(coursePrice);
+        
+        coursePrice = coursePrice === "undefined" ? "FREE" : coursePrice
 
         let course = await Course.findById(courseId);
         if(!course){
@@ -121,6 +125,7 @@ export const editCourse = async (req,res) => {
             })
         }
         let courseThumbnail;
+        let updateData={};
         if(thumbnail){
             if(course.courseThumbnail){
                 const publicId = course.courseThumbnail.split("/").pop().split(".")[0];
@@ -128,10 +133,13 @@ export const editCourse = async (req,res) => {
             }
             // upload a thumbnail on clourdinary
             courseThumbnail = await uploadMedia(thumbnail.path);
+            updateData = {courseTitle, subTitle,  category, courseLevel, coursePrice, courseThumbnail:courseThumbnail?.secure_url};
+        }
+        else {
+            updateData = {courseTitle, subTitle,  category, courseLevel, coursePrice};
         }
 
  
-        const updateData = {courseTitle, subTitle, description, category, courseLevel, coursePrice, courseThumbnail:courseThumbnail?.secure_url};
 
         course = await Course.findByIdAndUpdate(courseId, updateData, {new:true});
 

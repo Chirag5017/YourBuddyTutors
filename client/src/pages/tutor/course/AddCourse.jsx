@@ -40,7 +40,6 @@ const AddCourse = () => {
     await createCourse({ courseTitle, category });
   };
 
-  // for displaying toast
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message || "Course created successfully!");
@@ -65,7 +64,7 @@ const AddCourse = () => {
   ];
 
   return (
-    <div className="bg-slate-50 p-6 mt-23">
+    <div className="bg-slate-50 dark:bg-slate-900 p-6 mt-23 text-gray-900 dark:text-gray-100">
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
@@ -73,24 +72,24 @@ const AddCourse = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mb-4">
               <BookOpen className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
               Create Your Course
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Let's get started with the basics. Add some essential details for your new course and begin your teaching journey.
             </p>
           </div>
         </div>
 
         {/* Main Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
           {/* Card Header */}
-          <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+          <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border-b border-gray-200 dark:border-gray-600">
             <div className="flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-blue-600" />
-              <h2 className="text-xl font-semibold text-gray-800">Course Details</h2>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">Course Details</h2>
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               Fill in the basic information to create your course
             </p>
           </div>
@@ -99,7 +98,7 @@ const AddCourse = () => {
           <div className="p-8 space-y-8">
             {/* Course Title */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold text-gray-700 flex items-center gap-2">
+              <Label className="text-base font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
                 Course Title
               </Label>
@@ -108,33 +107,33 @@ const AddCourse = () => {
                 value={courseTitle}
                 onChange={(e) => setCourseTitle(e.target.value)}
                 placeholder="Enter your course name (e.g., Complete React Development Bootcamp)"
-                className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl transition-all duration-200"
+                className="h-12 text-base border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl transition-all duration-200"
               />
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Choose a clear, descriptive title that tells students what they'll learn
               </p>
             </div>
 
             {/* Category Selection */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold text-gray-700 flex items-center gap-2">
+              <Label className="text-base font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Category
               </Label>
               <Select onValueChange={getSelectedCategory}>
-                <SelectTrigger className="h-12 text-base border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl transition-all duration-200">
+                <SelectTrigger className="h-12 text-base border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-xl transition-all duration-200">
                   <SelectValue placeholder="Select a category for your course" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl border-2 border-gray-200">
+                <SelectContent className="rounded-xl border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-800">
                   <SelectGroup>
-                    <SelectLabel className="text-sm font-semibold text-gray-700 px-3 py-2">
+                    <SelectLabel className="text-sm font-semibold text-gray-700 dark:text-gray-200 px-3 py-2">
                       Choose Category
                     </SelectLabel>
                     {categories.map((cat) => (
                       <SelectItem 
                         key={cat.value} 
                         value={cat.value}
-                        className="hover:bg-blue-50 focus:bg-blue-50 rounded-lg mx-2 my-1 cursor-pointer transition-colors duration-200"
+                        className="hover:bg-blue-50 dark:hover:bg-blue-900 focus:bg-blue-50 dark:focus:bg-blue-900 rounded-lg mx-2 my-1 cursor-pointer transition-colors duration-200"
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-lg">{cat.icon}</span>
@@ -145,28 +144,28 @@ const AddCourse = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Select the category that best fits your course content
               </p>
             </div>
 
             {/* Preview Card */}
             {(courseTitle || category) && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 rounded-xl p-6 border border-blue-200 dark:border-blue-600">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-blue-600" />
                   Course Preview
                 </h3>
                 <div className="space-y-2">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-gray-600">Title:</span>
-                    <span className="text-base font-semibold text-gray-900">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Title:</span>
+                    <span className="text-base font-semibold text-gray-900 dark:text-white">
                       {courseTitle || "Your course title will appear here"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-gray-600">Category:</span>
-                    <span className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Category:</span>
+                    <span className="text-base font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       {category && (
                         <span className="text-lg">
                           {categories.find(cat => cat.value === category)?.icon}
@@ -181,12 +180,12 @@ const AddCourse = () => {
           </div>
 
           {/* Form Actions */}
-          <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
+          <div className="px-8 py-6 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <Button 
                 variant="outline" 
                 onClick={() => navigate("/tutor/course")}
-                className="px-6 py-3 rounded-xl border-2 border-gray-300 hover:bg-gray-100 transition-all duration-200"
+                className="px-6 py-3 cursor-pointer rounded-xl border-2 border-gray-300 dark:border-gray-600 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Cancel
@@ -195,7 +194,7 @@ const AddCourse = () => {
               <Button 
                 disabled={isLoading || !courseTitle.trim() || !category} 
                 onClick={createCourseHandler}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="px-8 py-3 cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
                   <>
@@ -214,23 +213,23 @@ const AddCourse = () => {
         </div>
 
         {/* Help Section */}
-        <div className="mt-8 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <div className="mt-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-blue-600" />
             Quick Tips
           </h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
+          <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-300">
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
               <div>
-                <p className="font-medium text-gray-700">Choose a Clear Title</p>
+                <p className="font-medium text-gray-700 dark:text-gray-200">Choose a Clear Title</p>
                 <p>Make it descriptive and include key learning outcomes</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
               <div>
-                <p className="font-medium text-gray-700">Select Right Category</p>
+                <p className="font-medium text-gray-700 dark:text-gray-200">Select Right Category</p>
                 <p>This helps students find your course more easily</p>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import RichTextEditor from "@/components/RichTextEditor";
+// import RichTextEditor from "@/components/RichTextEditor";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -95,7 +95,6 @@ const CourseTab = () => {
     const formData = new FormData();
     formData.append("courseTitle", input.courseTitle);
     formData.append("subTitle", input.subTitle);
-    formData.append("description", input.description);
     formData.append("category", input.category);
     formData.append("courseLevel", input.courseLevel);
     formData.append("coursePrice", input.coursePrice);
@@ -126,20 +125,24 @@ const CourseTab = () => {
   }, [isSuccess, error]);
 
   if(courseByIdLoading) return (
-    <div className="flex items-center justify-center h-96">
+    <div className="flex items-center justify-center h-96 bg-background dark:bg-background">
       <div className="flex items-center space-x-2">
-        <Loader2 className="h-6 w-6 animate-spin" />
-        <span className="text-lg font-medium">Loading course data...</span>
+        <Loader2 className="h-6 w-6 animate-spin text-primary dark:text-primary" />
+        <span className="text-lg font-medium text-foreground dark:text-foreground">
+          Loading course data...
+        </span>
       </div>
     </div>
   );
  
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-card dark:bg-card border-border dark:border-border">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4">
         <div className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Basic Course Information</CardTitle>
-          <CardDescription className="text-sm text-muted-foreground">
+          <CardTitle className="text-2xl font-bold text-card-foreground dark:text-card-foreground">
+            Basic Course Information
+          </CardTitle>
+          <CardDescription className="text-sm text-muted-foreground dark:text-muted-foreground">
             Make changes to your courses here. Click save when you're done.
           </CardDescription>
         </div>
@@ -148,13 +151,13 @@ const CourseTab = () => {
             disabled={courseByIdData?.course.lectures.length === 0} 
             variant="outline" 
             onClick={() => publishStatusHandler(courseByIdData?.course.isPublished ? "false" : "true")}
-            className="whitespace-nowrap"
+            className="whitespace-nowrap cursor-pointer hover:bg-accent dark:hover:bg-accent hover:text-accent-foreground dark:hover:text-accent-foreground border-border dark:border-border"
           >
             {courseByIdData?.course.isPublished ? "Unpublish" : "Publish"}
           </Button>
           <Button 
             variant="destructive" 
-            className="whitespace-nowrap"
+            className="whitespace-nowrap cursor-pointer hover:bg-destructive/90 dark:hover:bg-destructive/90"
           >
             Remove Course
           </Button>
@@ -164,7 +167,9 @@ const CourseTab = () => {
         <div className="grid gap-6">
           {/* Title Field */}
           <div className="space-y-2">
-            <Label htmlFor="courseTitle" className="text-sm font-medium">Course Title</Label>
+            <Label htmlFor="courseTitle" className="text-sm font-medium text-foreground dark:text-foreground">
+              Course Title
+            </Label>
             <Input
               id="courseTitle"
               type="text"
@@ -172,13 +177,15 @@ const CourseTab = () => {
               value={input.courseTitle}
               onChange={changeEventHandler}
               placeholder="Ex. Fullstack developer"
-              className="w-full"
+              className="w-full bg-background dark:bg-background border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:ring-ring dark:focus:ring-ring"
             />
           </div>
 
           {/* Subtitle Field */}
           <div className="space-y-2">
-            <Label htmlFor="subTitle" className="text-sm font-medium">Subtitle</Label>
+            <Label htmlFor="subTitle" className="text-sm font-medium text-foreground dark:text-foreground">
+              Subtitle
+            </Label>
             <Input
               id="subTitle"
               type="text"
@@ -186,84 +193,105 @@ const CourseTab = () => {
               value={input.subTitle}
               onChange={changeEventHandler}
               placeholder="Ex. Become a Fullstack developer from zero to hero in 2 months"
-              className="w-full"
+              className="w-full bg-background dark:bg-background border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:ring-ring dark:focus:ring-ring"
             />
-          </div>
-
-          {/* Description Field */}
-          <div className="space-y-2">
-            <Label className="text-sm font-medium">Description</Label>
-            {/* <RichTextEditor input={input} setInput={setInput} /> */}
-            <div className="min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-muted-foreground">
-              Rich text editor will be rendered here
-            </div>
           </div>
 
           {/* Category, Level, and Price Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Category</Label>
+              <Label className="text-sm font-medium text-foreground dark:text-foreground">
+                Category
+              </Label>
               <Select
                 value={input.category}
                 onValueChange={selectCategory}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full bg-background dark:bg-background border-border dark:border-border text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover dark:bg-popover border-border dark:border-border">
                   <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Next JS">Next JS</SelectItem>
-                    <SelectItem value="Data Science">Data Science</SelectItem>
-                    <SelectItem value="Frontend Development">
+                    <SelectLabel className="text-muted-foreground dark:text-muted-foreground">
+                      Category
+                    </SelectLabel>
+                    <SelectItem value="Next JS" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Next JS
+                    </SelectItem>
+                    <SelectItem value="Data Science" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Data Science
+                    </SelectItem>
+                    <SelectItem value="Frontend Development" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
                       Frontend Development
                     </SelectItem>
-                    <SelectItem value="Fullstack Development">
+                    <SelectItem value="Fullstack Development" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
                       Fullstack Development
                     </SelectItem>
-                    <SelectItem value="MERN Stack Development">
+                    <SelectItem value="MERN Stack Development" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
                       MERN Stack Development
                     </SelectItem>
-                    <SelectItem value="Javascript">Javascript</SelectItem>
-                    <SelectItem value="Python">Python</SelectItem>
-                    <SelectItem value="Docker">Docker</SelectItem>
-                    <SelectItem value="MongoDB">MongoDB</SelectItem>
-                    <SelectItem value="HTML">HTML</SelectItem>
+                    <SelectItem value="Javascript" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Javascript
+                    </SelectItem>
+                    <SelectItem value="Python" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Python
+                    </SelectItem>
+                    <SelectItem value="Docker" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Docker
+                    </SelectItem>
+                    <SelectItem value="MongoDB" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      MongoDB
+                    </SelectItem>
+                    <SelectItem value="HTML" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      HTML
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Course Level</Label>
+              <Label className="text-sm font-medium text-foreground dark:text-foreground">
+                Course Level
+              </Label>
               <Select
                 value={input.courseLevel}
                 onValueChange={selectCourseLevel}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full bg-background dark:bg-background border-border dark:border-border text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
                   <SelectValue placeholder="Select a course level" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-popover dark:bg-popover border-border dark:border-border">
                   <SelectGroup>
-                    <SelectLabel>Course Level</SelectLabel>
-                    <SelectItem value="Beginner">Beginner</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="Advance">Advance</SelectItem>
+                    <SelectLabel className="text-muted-foreground dark:text-muted-foreground">
+                      Course Level
+                    </SelectLabel>
+                    <SelectItem value="Beginner" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Beginner
+                    </SelectItem>
+                    <SelectItem value="Medium" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Medium
+                    </SelectItem>
+                    <SelectItem value="Advance" className="text-foreground dark:text-foreground hover:bg-accent dark:hover:bg-accent">
+                      Advance
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="coursePrice" className="text-sm font-medium">Price (INR)</Label>
+              <Label htmlFor="coursePrice" className="text-sm font-medium text-foreground dark:text-foreground">
+                Price (INR)
+              </Label>
               <Input
                 id="coursePrice"
-                type="number"
+                type="text"
                 name="coursePrice"
                 value={input.coursePrice}
                 onChange={changeEventHandler}
                 placeholder="199"
-                className="w-full"
+                className="w-full bg-background dark:bg-background border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:ring-ring dark:focus:ring-ring"
                 min="0"
               />
             </div>
@@ -271,25 +299,21 @@ const CourseTab = () => {
 
           {/* Thumbnail Upload */}
           <div className="space-y-3">
-            <Label htmlFor="courseThumbnail" className="text-sm font-medium">Course Thumbnail</Label>
+            <Label htmlFor="courseThumbnail" className="text-sm font-medium text-foreground dark:text-foreground">
+              Course Thumbnail
+            </Label>
             <Input
               id="courseThumbnail"
               type="file"
               onChange={selectThumbnail}
               accept="image/*"
-              className="col-span-2 block w-full text-sm text-gray-500 
-             file:mr-4 file:py-2 file:px-4 
-             file:rounded-md file:border-0 
-             file:text-sm file:font-semibold 
-             file:bg-green-100 file:text-green-700 
-             hover:file:bg-green-200 
-             cursor-pointer file:cursor-pointer"
+              className="w-fit cursor-pointer file:cursor-pointer h-12 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-950 file:text-blue-700 dark:file:text-blue-300 hover:file:bg-blue-100 dark:hover:file:bg-blue-900 bg-background dark:bg-background text-foreground dark:text-foreground"
             />
             {previewThumbnail && (
               <div className="mt-4">
                 <img
                   src={previewThumbnail}
-                  className="h-64 w-auto rounded-lg border object-cover shadow-sm"
+                  className="h-64 w-auto rounded-lg border border-border dark:border-border object-cover shadow-sm dark:shadow-slate-800"
                   alt="Course Thumbnail Preview"
                 />
               </div>
@@ -299,16 +323,16 @@ const CourseTab = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button 
-              onClick={() => navigate("/admin/course")} 
+              onClick={() => navigate("/tutor/course")} 
               variant="outline"
-              className="flex-1 sm:flex-none"
+              className="flex-1 sm:flex-none cursor-pointer hover:bg-accent dark:hover:bg-accent hover:text-accent-foreground dark:hover:text-accent-foreground border-border dark:border-border"
             >
               Cancel
             </Button>
             <Button 
               disabled={isLoading} 
               onClick={updateCourseHandler}
-              className="flex-1 sm:flex-none"
+              className="flex-1 sm:flex-none cursor-pointer bg-primary dark:bg-primary text-primary-foreground dark:text-primary-foreground hover:bg-primary/90 dark:hover:bg-primary/90"
             >
               {isLoading ? (
                 <>

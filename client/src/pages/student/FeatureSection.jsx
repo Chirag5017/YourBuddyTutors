@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Award, 
+import {
+  Users,
+  Award,
   Target,
   Clock,
 } from 'lucide-react';
+
 const FeatureSection = () => {
   const features = [
     {
@@ -30,7 +31,7 @@ const FeatureSection = () => {
   ];
 
   return (
-    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-slate-50">
+    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-slate-50 dark:bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.div
           className="text-center mb-12 sm:mb-16"
@@ -39,10 +40,10 @@ const FeatureSection = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
             Why Choose Your Buddy Tutor?
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto px-4">
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto px-4">
             Experience the future of education with our innovative platform designed to make learning engaging, effective, and accessible.
           </p>
         </motion.div>
@@ -51,25 +52,25 @@ const FeatureSection = () => {
           {features.map((feature, index) => (
             <motion.div
               key={index}
-              className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
+              className="bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-slate-700"
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              whileHover={{ 
+              whileHover={{
                 y: -10,
                 boxShadow: "0 25px 50px rgba(0, 0, 0, 0.1)"
               }}
             >
-              <motion.div 
+              <motion.div
                 className="bg-gradient-to-br from-purple-500 to-blue-500 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6"
                 whileHover={{ rotate: 10, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </motion.div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed text-sm sm:text-base">{feature.description}</p>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">{feature.title}</h3>
+              <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm sm:text-base">{feature.description}</p>
             </motion.div>
           ))}
         </div>
@@ -78,4 +79,4 @@ const FeatureSection = () => {
   );
 };
 
-export default FeatureSection
+export default FeatureSection;
