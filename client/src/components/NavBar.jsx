@@ -40,7 +40,7 @@ const Navbar = () => {
     await logoutUser();
   }
 
-  console.log(user);
+  // console.log(user);
 
 
   useEffect(() => {

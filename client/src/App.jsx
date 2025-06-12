@@ -51,11 +51,11 @@ function App() {
       </ProtectedRoute>
     } />
 
-    <Route path="course/search" element={
+    {/* <Route path="course/search" element={
       <ProtectedRoute>
         <SearchPage />
       </ProtectedRoute>
-    } />
+    } /> */}
 
     <Route path="course-detail/:courseId" element={
       <ProtectedRoute>
