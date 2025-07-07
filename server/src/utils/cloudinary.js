@@ -13,9 +13,19 @@ export const uploadMedia = async (file) => {
     const uploadResponse = await cloudinary.uploader.upload(file, {
       resource_type: "auto",
     });
+
+     if (fs.existsSync(file)) {
+            fs.unlinkSync(file); 
+            console.log(`File ${localFilePath} successfully deleted..`);
+        }
+
     return uploadResponse;
+
   } catch (error) {
-    console.log(error);
+      if (localFilePath && fs.existsSync(file)) {
+            fs.unlinkSync(file);
+        }
+    console.error(error.message);
   }
 };
 export const deleteMediaFromCloudinary = async (publicId) => {
