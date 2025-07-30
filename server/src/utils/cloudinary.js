@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config({});
 
@@ -16,13 +17,13 @@ export const uploadMedia = async (file) => {
 
      if (fs.existsSync(file)) {
             fs.unlinkSync(file); 
-            console.log(`File ${localFilePath} successfully deleted..`);
+            console.log(`File ${file} successfully deleted..`);
         }
 
     return uploadResponse;
 
   } catch (error) {
-      if (localFilePath && fs.existsSync(file)) {
+      if (file && fs.existsSync(file)) {
             fs.unlinkSync(file);
         }
     console.error(error.message);
